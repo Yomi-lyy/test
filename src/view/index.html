@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>首页展示</title>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <style>
+        body {
+            background-color: #EE6363;
+            margin: 0;
+            padding: 0;
+        }
+
+        .q {
+            height: 60px;
+            color: white;
+            padding-top: 30px;
+            padding-left: 10%;
+            font-family: 微软雅黑;
+            font-size: 50px;
+        }
+
+        .e {
+            padding-left: 10%;
+            color: white;
+        }
+
+        .w {
+            width: 100%;
+            height: 80px;
+            position: relative;
+            background-color: rgba(255, 251, 240, 0.2);
+        }
+
+        .r {
+            width: 100%;
+            height: 80px;
+            margin-top: 25px;
+            position: relative;
+            background-color: rgba(255, 251, 240, 0.2);
+        }
+
+        .t {
+            width: 100%;
+            height: 80px;
+            margin-top: 25px;
+            position: relative;
+            background-color: rgba(255, 251, 240, 0.2);
+        }
+
+        .y {
+            margin-left: 50%;
+            position: relative;
+            color: white;
+            font-size: 20px;
+        }
+
+        .u {
+            padding-left: 10%;
+            position: relative;
+            color: white;
+            top: -10px;
+            font-size: 25px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="q">待办事项清单</div>
+    <p class="e">不积跬步无以至千里</p>
+    <hr style="margin: 0 10% 6% 10%;">
+    <div class="u">
+        <p>添加到待办事项列表</p>
+        <input id="app" type="text" placeholder="请输入待办项目名称"
+            style="text-indent:1em;height:40px;width:200px;font-size:15px;" />
+        <button id='pl' onclick="dj()"
+            style="text-indent:0.3em;height:47px;width:100px;font-size:15px;background-color:#EE6363;color:white;">添加项目</button>
+        <button id='cjx' onclick="cjxm()"
+            style="text-indent:0.3em;height:47px;width:100px;font-size:15px;background-color:#EE6363;color:white;">创建项目</button>
+    </div>
+    <div class="t" id="k">
+        <div style="padding-top:20px;padding-left:40%;color:white;font-size:30px;">
+            待办事项列表
+        </div>
+    </div>
+    <table id="yh" border="solid 8 white" cellspacing="8"
+        style="border-width:0px 0px 0px 0px;border-color:rgba(255,251,240, 0.2);">
+        <tbody id="tbMain"></tbody>
+    </table>
+    <script>
+        function t() {
+            var se = document.getElementById('pl').value;
+            if (se.length == 0) {
+                alert('请输入事项名称！');
+                app.focus();
+            }
+            else {
+                alert("成功添加事项" + se);
+                //存储添加的事项名称
+            }
+        }
+
+        function bj() {
+            window.open("http://localhost:63342/untitled/venv/child.html?_ijt=n4c8qm2l7q7r7sagl47kr3db0r");
+        }
+
+        //保存所有输入的事项名称数据
+        $(window).ready(function () {
+            var getRecord = window.localStorage.getItem("tjbtn");
+            var tjbtnArr = [];
+            var tjbtnArr2 = [];
+            if (getRecord == null) {
+                //向本地添加记录
+                $('.u').click(function () {
+                    var c = $('#app').val();//判断输入是否为空值，空值默认不存储
+                    if (c.length == 0)
+                        console.log('空值不存储');
+                    else {
+                        tjbtnArr.push($('#app').val());
+                        window.localStorage.setItem("tjbtn", tjbtnArr);
+                        $('#app').val('');
+                    }
+                });
+            }
+            else {
+                tjbtnArr2 = getRecord.split(',');
+                if (tjbtnArr2.length > 2) {
+                    var str = '';
+                }
+                //向本地添加记录
+                $('#pl').click(function () {
+                    var c = $('#app').val();//判断输入是否为空值，空值默认不存储
+                    if (c.length == 0)
+                        console.log('空值不存储');
+                    else {
+                        tjbtnArr2.push($('#app').val());
+                        window.localStorage.setItem("tjbtn", tjbtnArr2);
+                        window.localStorage.getItem(tjbtnArr2);
+                        $('#app').val('');
+                    }
+                });
+            }
+        });
+
+        //封装一个对象存储事项id,内容，事项名称，时间
+
+        function iClass(id, name, time, text) {
+            var Obj1 = new Object();
+            Obj1.id = localStorage.getItem("id");
+            Obj1.name = localStorage.getItem("bj");
+            Obj1.time = localStorage.getItem("shijian");
+            Obj1.text = localStorage.getItem("dq");
+
+
+            var newArray = [];
+            Object.keys(Obj1).forEach(key => {
+                newArray.push(Obj1[key]);
+            })
+            console.log(newArray);
+            //存储对象的值
+            //取对象数据的时候要转换为数据-->
+            var ho = JSON.stringify(newArray);
+            window.localStorage.setItem("title", ho);
+            JSON.parse(window.localStorage.getItem("title"));
+
+        }
+
+        //实例化对象
+        var cun = new iClass();
+
+
+        //拼接所有ID编辑事项内容的值变成这种形式[{"id":"theid2","name":"vbh"},{"id":"theid2","name":"vbh"},{"id":"theid2","name":"vbh"}]
+
+
+
+        //字符串转换为json数据，相反JSON.stringify() 方法将 JavaScript 对象转换为字符串
+        var hc = localStorage.getItem("tjbtn");
+        hcc = hc.split(',');
+        var hg = JSON.stringify(hcc);
+        var per = JSON.parse(hg);
+        var tbody = document.getElementById('tbMain');
+        for (var i = 0; i < per.length; i++) { //遍历一下json数据
+            var trow = getDataRow(per[i]); //定义一个方法,返回tr数据
+            tbody.appendChild(trow);
+        }
+
+        //给动态表格添加一个ID
+        function add_id() {
+            var trid = document.getElementsByTagName('tr');
+            for (i = 0; i < trid.length; i++) {
+                trid[i].id = 'theid' + i;
+            }
+        }
+        window.onload = add_id;
+
+        function getDataRow(h) {
+            var row = document.createElement('tr'); //创建行
+            row.style.backgroundColor = "rgba(255,251,240, 0.2)";
+            row.style.top = '100px';
+            row.style.height = "40px";
+            var idCell = document.createElement('td'); //创建第一列id
+            idCell.style.padding = '0 0 0 20%';
+            idCell.style.width = "97%";
+            idCell.style.color = "white";
+            idCell.innerHTML = h; //填充数据
+            row.appendChild(idCell); //加入行
+
+            //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮
+            var bjCell = document.createElement('td');//创建操作列
+            bjCell.style.padding = '0 0 0 100px';
+            row.appendChild(bjCell);
+            var btDel = document.createElement('input'); //创建一个input控件
+            btDel.style.backgroundColor = "rgba(250,230,230, 0.2)";
+            btDel.style.color = 'white';
+            btDel.style.margin = '0 40px 0 -40px';
+            btDel.setAttribute('type', 'button'); //type="button"
+            btDel.setAttribute('value', '编辑');
+            bjCell.appendChild(btDel);
+
+            //编辑操作
+
+            bjCell.onclick = function () {
+
+                if (confirm("确定编辑吗？")) {
+                    //取选中编辑行的项目名称
+                    $("table").on("click", "tr", function () {
+                        var _this = $(this).children();
+
+                        //存储选中编辑行的项目名称
+                        window.localStorage.setItem("bj", _this.html());
+                        window.localStorage.getItem(_this.html());
+
+                        //取父级元素的ID
+// < !--                        var the = $(this).parents("tr").eq(0).attr("id"); -->
+// < !--                        var the = $("table tr").attr("id"); -->
+
+                        //取当前选中行的id
+                        var the = $(this).attr("id")
+                        window.localStorage.setItem("id", the);
+                        window.localStorage.getItem(the);
+
+                        //选中编辑行的项目名称赋值给创建事项清单中的事项名称
+                        if (true) {
+                            //把选中行的参数id传到URL里
+                            var gid = localStorage.getItem('id');
+                            var url = "http://localhost:63342/untitled/venv/layDate-v5.0.9/%E7%BC%96%E8%BE%91%E4%BA%8B%E9%A1%B9%E6%B8%85%E5%8D%9505-10.html?_ijt=t65m3p1br13qu9n45it09jvged?type=edit" + '?' + 'id=' + gid;
+                            window.location.href = url;
+                        }
+                    });
+                }
+            }
+            var delCell = document.createElement('td');//创建操作列
+            delCell.style.padding = '0 0 0 100px';
+            row.appendChild(delCell);
+            var btnDel = document.createElement('input'); //创建一个input控件
+            btnDel.style.backgroundColor = "rgba(250,230,230, 0.2)";
+            btnDel.style.margin = '0 40px 0 -40px';
+            btnDel.style.color = 'white';
+            btnDel.setAttribute('type', 'button'); //type="button"
+            btnDel.setAttribute('value', '删除');
+            //删除操作
+            btnDel.onclick = function () {
+                if (confirm("确定删除？")) {
+                    //找到按钮所在行的节点，然后删掉这一行
+                    this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+                }
+            }
+            delCell.appendChild(btnDel);
+            return row; //返回tr数据
+        }
+        function dj() {
+            var r = document.getElementById('app').value;
+            if (r.length <= 0) {
+                alert('请输入事项名称');
+                return false;
+            }
+            else {
+                window.location.reload();
+                setTimeout('myrefresh()', 1000);
+            }
+        }
+        function cjxm() {
+            window.open('http://localhost:63342/untitled/venv/%E7%BC%96%E8%BE%91%E4%BA%8B%E9%A1%B9%E6%B8%85%E5%8D%95%E5%A4%87%E4%BB%BD.html?_ijt=kvkn5dp28v70q3rd39pq6okd2k');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;">
+
+<head>
+    <meta charset="UTF-8">
+    <title>监听本页面localStorage变化</title>
+    <style>
+        body {
+            background-color: #EE6363;
+            margin: 0;
+            padding: 0;
+        }
+
+        .q {
+            height: 60px;
+            color: white;
+            padding-top: 30px;
+            padding-left: 10%;
+            font-family: 微软雅黑;
+            font-size: 50px;
+        }
+
+        .e {
+            padding-left: 10%;
+            color: white;
+        }
+
+        #t {
+            color: black;
+            padding-top: 10px;
+            margin-left: 20% ;
+            font-family:微软雅黑;
+            font-size: 20px;
+            width: 65%;
+            height: 30px;
+            position: relative;
+            background-color: white;
+            margin: 0 10% 6% 25%;
+        }
+
+        #o {
+            color: black;
+            padding-top: 10px;
+            margin-left: 20% ;
+            font-family:微软雅黑;
+            font-size: 20px;
+            width: 65%;
+            height: 30px;
+            position: relative;
+            background-color: white;
+            margin: 0 10% 6% 25%;
+        }
+
+        #y {
+            color: black;
+            padding-top: 10px;
+            margin-left: 20% ;
+            font-family:微软雅黑;
+            font-size: 20px;
+            width: 65%;
+            height: 400px;
+            position: relative;
+            background-color: white;
+            margin: 0 10% 6% 25%;
+        }
+
+        .u {
+            height: 50px;
+            width: 100px;
+            border-radius: 8%;
+            color: white;
+            margin: 0 10% 6% 25%;
+            font-family: 微软雅黑;
+            font-size: 20px;
+            background-color: #EE6363;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="laydate/laydate.js"></script>
+</head>
+
+<body style="height:100%;margin:0;">
+
+    <div class="q">编辑事项清单</div>
+    <p class="e">不积跬步无以至千里</p>
+    <hr style="margin: 0 10% 6% 10%;">
+    <div id="p">
+        <label
+            style="width:18%;top:35px;color:white;font-size:18px;position:relative;padding-left:10%;padding-right:5px;">事项名称：</label>
+        <input id="t" class="ee" type="text" onblur="ty()" style="text-indent:1em;border-radius:10px;">
+    </div>
+    <label
+        style="width:18%;top:35px;color:white;font-size:18px;position:relative;padding-left:10%;padding-right:5px;">待办时间：</label>
+    <input id="o" onblur="ti()" style="text-indent:1em;border-radius:10px;"></input>
+    <div>
+        <label
+            style="width:18%;top:35px;color:white;font-size:18px;position:relative;padding-left:10%;padding-right:5px;">事项内容：</label>
+        <textarea id="y" type="text" onblur="ah()" style="text-indent:1em;border-radius:10px;"></textarea>
+        <button type="submit" id="hu" class="u" onclick="th()"> 提交 </button><button id="io" type="submit" class="u"
+            onclick="bg()">保存</button>
+        <!--         onclick="localStorage.setItem('t',document.getElementById('t').value)"-->
+    </div>
+    <script>
+
+// <!--        (function () {-->
+// <!--            //定义一个变量让setItem函数的值指向它-->
+// <!--            let originalSetItem = localStorage.setItem;-->
+// <!--            //重写setItem函数-->
+// <!--            localStorage.setItem = function (key, newValue) {-->
+// <!--                //创建setItemEvent事件-->
+// <!--                let event = new Event("setItemEvent");-->
+// <!--                event.key = key;-->
+// <!--                event.newValue = newValue;-->
+// <!--                //提交setItemEvent事件-->
+// <!--                window.dispatchEvent(event);-->
+// <!--                //执行原setItem函数-->
+// <!--                originalSetItem.apply(this, arguments);-->
+// <!--            }-->
+// <!--        })();-->
+// <!--        //添加setItemEvent监听事件-->
+// <!--        window.addEventListener("setItemEvent", function (e) {-->
+// <!--            if (e.key === 't') {-->
+// <!--                let oldValue = localStorage.getItem("t");-->
+// <!--                if (oldValue !== e.newValue) {-->
+// <!--                    console.log('localStorage的t值发生改变,由' +-->
+// <!--                        oldValue + '改变为' + e.newValue);-->
+// <!--                    var arr = [];-->
+// <!--                    arr[0] = oldValue;-->
+// <!--                    arr[1] = e.newValue;-->
+// <!--                    var b = [];-->
+// <!--                    b = b.concat(arr);-->
+// <!--                    console.log(b);-->
+// <!--                } else {-->
+// <!--                    console.log('localStorage的t值' + oldValue);-->
+// <!--                    console.log('localStorage的t值' + e.newValue);-->
+// <!--                }-->
+// <!--            }-->
+// <!--        });-->
+
+        //时间选择器
+        laydate.render({
+            elem: '#o'
+            , type: 'datetime'
+        });
+
+        //存取事项名称的值
+        $(window).ready(function () {
+            var getRecord = window.localStorage.getItem("record");
+            var recordArr = [];
+            var recordArr2 = [];
+// <!--            console.log(getRecord);-->
+            if (getRecord == null) {
+                //向本地添加记录
+                $('.u').click(function () {
+                    recordArr.push($('#t').val());
+                    window.localStorage.setItem("record", recordArr);
+                    $('#t').val('');
+                });
+            }
+            else {
+                recordArr2 = getRecord.split(',');
+                if (recordArr2.length > 2) {
+                    var str = '';
+                }
+                //向本地添加记录
+                $('.u').click(function () {
+                    recordArr2.push($('#t').val());
+                    window.localStorage.setItem("record", recordArr2);
+                    window.localStorage.getItem(recordArr2);
+                    $('#t').val('');
+                });
+            }
+        });
+
+        //存取时间的值
+        $(window).ready(function () {
+            var reco = JSON.stringify(window.localStorage.getItem("record2"));
+            var getRecord2 = JSON.parse(reco);
+            var recordArr5 = [];
+            var recordArr6 = [];
+            if (getRecord2 == null) {
+                //向本地添加记录
+                $('.u').click(function () {
+                    recordArr5.push($('#o').val());
+                    window.localStorage.setItem("record2", recordArr5);
+                    $('#o').val('');
+                });
+            }
+            else {
+                recordArr6 = getRecord2.split(',');
+                if (recordArr6.length > 2) {
+                    var str = '';
+                }
+                //向本地添加记录
+                $('.u').click(function () {
+                    var tg = $('#o').val();
+                    if (tg.length == 0)
+                        console.log('空值不存储');
+                    else {
+                        recordArr6.push($('#o').val());
+                        window.localStorage.setItem("record2", recordArr6);
+                        window.localStorage.getItem(recordArr6);
+                        $('#o').val('');
+                    }
+                });
+            }
+        });
+
+        $(window).ready(function () {
+            //不共享历史记录的话就加入一个userID
+            var getRecord1 = window.localStorage.getItem("record1");//根据用户ID取到记录
+            var recordArr3 = [];
+            var recordArr4 = [];
+            if (getRecord1 == null) {
+                //向本地添加记录
+                $('.u').click(function () {
+                    recordArr3.push($('#y').val());
+                    window.localStorage.setItem("record1", recordArr3);
+                    $('#y').val('');
+                });
+            }
+            else {
+                recordArr4 = getRecord1.split(',');
+                if (recordArr4.length > 2) {
+                    var str = '';
+                }
+                //向本地添加记录
+                $('.u').click(function () {
+                    var tg = $('#y').val();
+                    if (tg.length == 0)
+                        console.log('空值不存储');
+                    else {
+                        recordArr4.push($('#y').val());
+                        window.localStorage.setItem("record1", recordArr4);
+                        window.localStorage.getItem(recordArr4);
+                        $('#y').val('');
+                    }
+                });
+            }
+        });
+
+        //鼠标点击提交事件
+        function th() {
+            ty();
+            ah();
+            ti();
+            var tg = $('#y').val();
+// <!--            var tr = JSON.stringify(tg);-->
+// <!--            var vb = JSON.parse(tr);-->
+// <!--            window.localStorage.setItem('dq', vb);-->
+// <!--            window.localStorage.getItem('dq');-->
+
+// <!--            var sj = $('#o').val();-->
+// <!--            var sj1 = JSON.stringify(sj);-->
+// <!--            var sj2 = JSON.parse(sj1);-->
+// <!--            window.localStorage.setItem('shijian', sj2);-->
+// <!--            window.localStorage.getItem('shijian');-->
+// <!--            console.log(localStorage.getItem('shijian'));-->
+            //刷新页面
+            window.location.reload();
+            if (tg.length == 0)
+                alert('事项内容为空，请重新输入！');
+            else {
+                alert('提交成功');
+                window.open('http://localhost:63342/untitled/venv/list/list.html?_ijt=9hb1hufp7k7429iqm5iov86dos');
+            }
+        }
+
+        //判断事项名称是否输入
+        function ty() {
+            var r = document.getElementById('t').value;
+            if (r.length <= 0) {
+                alert('请输入事项名称');
+                // r.focus();
+            }
+            else
+                return true;
+        }
+
+        //判断事项内容是否输入
+        function ah() {
+            var y = document.getElementById('y').value;
+            if (y.length <= 0) {
+                alert('请输入事项内容');
+                //y.focus();
+            }
+            else
+                return true;
+        }
+
+        //判断时间是否选择
+        function ti() {
+            var o = document.getElementById('o').value;
+            if (o.length <= 0) {
+                alert('请选择时间');
+            }
+            else
+                return true;
+        }
+
+        //鼠标点击保存事件
+        function bg() {
+            //新建一个对象保存
+
+            iClass()；
+            alert('保存成功');
+            //刷新页面
+            window.location.reload();
+        }
+
+        //页面加载完毕把首页创建的值传给编辑页面
+        window.onload = function hbn() {
+            document.getElementById("t").value = localStorage.getItem('bj');
+// <!--            document.getElementById('y').innerHTML = localStorage.getItem('dq');-->
+// <!--            document.getElementById('o').value = localStorage.getItem('shijian')-->
+//             var cv = localStorage.getItem(_this.html());
+
+        }
+         //判断时间是否选择
+// <!--        function asd() {-->
+// <!--            var o =  localStorage.getItem('the')+localStorage.getItem('record')+localStorage.getItem('record1')+localStorage.getItem('record2');-->
+
+// <!--            console.log(o);-->
+
+// <!--        }-->
+
+
+
+
+
+    </script>
+</body>
+
+</html>

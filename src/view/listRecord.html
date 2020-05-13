@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My first Vue app</title>
+    <style>
+        body {
+            background-color: #EE6363;
+            margin: 0;
+            padding: 0;
+        }
+
+        .q {
+            height: 60px;
+            color: white;
+            padding-top: 30px;
+            padding-left: 10%;
+            font-family: 微软雅黑;
+            font-size: 50px;
+        }
+
+        .e {
+            padding-left: 10%;
+            color: white;
+        }
+
+        #ni {
+            width: 1000px;
+            height: 300px;
+            position: relative;
+            border: 1px solid white;
+            left: 10%;
+            line-height: 10px;
+            color: white;
+        }
+
+        #tbMain {
+            padding-left: 30px;
+        }
+
+        #tbMain1 {
+            padding-left: 30px;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+</head>
+
+<body>
+    <div class="q">创建事项清单</div>
+    <p class="e">不积跬步无以至千里</p>
+    <hr style="margin: 0 10% 6% 10%;">
+    <div style="padding:0px 0 20px 10%;color:white;font-size:20px;font-weight:bold;">
+        <span style="padding:0 0 0 5%;">序号</span>
+        <span style="padding:0 0 0 10%;">事项名称</span>
+        <span style="padding:0 0 0 12%;">事项内容</span>
+        <span style="padding:0 0 0 12%;">创建时间</span>
+        <span style="padding:0 0 0 10%;">操作</span>
+    </div>
+    <table id="ni">
+<!--        <tr>-->
+<!--            <td id="hy" style="padding-left:6%">nijjj</td>-->
+<!--            <td id="ha" style="padding-left:10%">nijjj</td>-->
+<!--            <td id="hw" style="padding-left:20%">nijjj</td>-->
+<!--        </tr>-->
+<!--        <tr id="ii">-->
+<!--            <td id="y" style="padding-left:6%">nijjj</td>-->
+<!--            <td id="a" style="padding-left:10%">nijjj</td>-->
+<!--            <td id="w" style="padding-left:20%">nijjj</td>-->
+<!--        </tr>-->
+        <tbody id="tbMain" class="iuj"></tbody>
+        <tbody id="tbMain1"></tbody>
+    </table>
+    <!--    <button id="yuu" onclick="add()">hh</button>-->
+    <script>
+        window.onload = function () {
+            var arr = new Array();
+            arr[0] = window.localStorage.getItem('t', name);
+            arr[1] = window.localStorage.getItem('y', name);
+            arr[2] = window.localStorage.getItem('o', name);
+            window.localStorage.setItem('key', JSON.stringify(arr));
+            console.log(JSON.parse(window.localStorage.getItem('key')));
+            alert(arr);
+// <!--            var user = localStorage.getItem("t");-->
+// <!--            var nei = localStorage.getItem("y");-->
+// <!--            var time = localStorage.getItem("o");-->
+// <!--            document.getElementById("hy").innerHTML = user;-->
+// <!--            document.getElementById("ha").innerHTML = nei;-->
+// <!--            document.getElementById("hw").innerHTML = time;-->
+
+// <!--            //跨页面取record的值-->
+// <!--            var gh = localStorage.getItem("record");-->
+// <!--            document.getElementById("y").innerHTML = gh[5];-->
+// <!--            var y1 = localStorage.getItem("record1");-->
+// <!--            document.getElementById("a").innerHTML = y1[6];-->
+
+// <!--            UserClass();-->
+// <!--            fu();-->
+        }
+
+// <!--        //封装一个对象存储事项内容，事项名称，时间-->
+// <!--        function UserClass(user, nei, tj) {-->
+// <!--            var UserObj = new Object();-->
+// <!--            UserObj.user = localStorage.getItem("record");-->
+// <!--            UserObj.nei = localStorage.getItem("record1");-->
+// <!--            UserObj.tj = window.localStorage.getItem("btn");-->
+// <!--            UserObj.consoleInfo = function () {-->
+// <!--                console.log("事项名称:" + UserObj.user + "||事项内容:" + UserObj.nei + "||添加项目:" + UserObj.tj);-->
+
+// <!--                //拆分事项名称数组-->
+// <!--                var obj1 = UserObj.user;-->
+// <!--                console.log("原始数据是对象数组：" + UserObj.user);-->
+// <!--                var obj = UserObj.user[0];-->
+// <!--                console.log("获取第一个对象：" + obj);-->
+// <!--                var out_arr = [];	//创建一个数组-->
+// <!--                for (var key in obj1) {-->
+// <!--                    var temp = {};-->
+// <!--                    temp.user = key;-->
+// <!--                    temp.value = obj1[key];-->
+// <!--                    out_arr.push(temp);-->
+// <!--                }-->
+// <!--                console.log("提取user：" + out_arr[0].user);-->
+// <!--                var res = JSON.stringify(out_arr);	//转换json-->
+// <!--                console.log("转换输出：" + res);-->
+
+// <!--                //拆分事项内容数组-->
+// <!--                var ob = UserObj.nei;-->
+// <!--                console.log("原始数据是对象数组：" + UserObj.nei);-->
+// <!--                var ob1 = UserObj.nei[0];-->
+// <!--                console.log("获取第一个对象：" + ob1);-->
+// <!--                var out = [];	//创建一个数组-->
+// <!--                for (var key in ob) {-->
+// <!--                    var temp1 = {};-->
+// <!--                    temp1.nei = key;-->
+// <!--                    temp1.value = ob[key];-->
+// <!--                    out.push(temp1);-->
+// <!--                }-->
+// <!--                console.log("提取nei：" + out[0].nei);-->
+// <!--                var re = JSON.stringify(out);	//转换json-->
+// <!--                console.log("转换输出：" + re);-->
+
+
+// <!--                //存储拆分后的事项名称value值-->
+
+// <!--                window.localStorage.setItem("res", res);-->
+// <!--                window.localStorage.getItem("res");-->
+
+// <!--                //存储拆分后的事项内容的value值-->
+
+// <!--                window.localStorage.setItem("re", re);-->
+// <!--                window.localStorage.getItem("re");-->
+// <!--            }-->
+// <!--            return UserObj;-->
+// <!--        }-->
+
+// <!--        //实例化-->
+// <!--        var he = new UserClass();-->
+// <!--        he.consoleInfo();-->
+
+        function fu() {
+            var gh = localStorage.getItem("res");
+        }
+
+        //字符串转换为json数据，相反JSON.stringify() 方法将 JavaScript 对象转换为字符串
+        var ci = localStorage.getItem("record");
+        hci = ci.split(',');
+        var hg = JSON.stringify(hci);
+        var per = JSON.parse(hg);
+
+        var pi = localStorage.getItem("record1");
+        pio = pi.split(',');
+        var hgi = JSON.stringify(pio);
+        var p = JSON.parse(hgi);
+
+        var tbody = document.getElementById('tbMain');
+        var tbody1 = document.getElementById('tbMain');
+        for (var i = 0, j = 0; i < per.length && j < p.length; i++, j++) { //遍历一下json数据
+            var trow = getDataRow(per[i]); //定义一个方法,返回tr数据
+            var trow1 = getDataRow1(p[j])
+            tbody.appendChild(trow);
+            tbody1.appendChild(trow1);
+        }
+
+        function getDataRow(h) {
+            var row = document.createElement('tr'); //创建行
+            var idCell = document.createElement('td'); //创建第一列id
+            idCell.style.padding = '30px 0 0 70px';
+            row.appendChild(idCell); //加入行 ，下面类似
+
+            var nameCell = document.createElement('td');//创建第二列name
+            nameCell.style.padding = '30px 50px 0 100px';
+            nameCell.style.margin = '0';
+            nameCell.innerHTML = h;
+            row.appendChild(nameCell);
+            return row; //返回tr数据
+        }
+
+        function getDataRow1(g) {
+            var row = document.createElement('tr'); //创建行
+            var idCell = document.createElement('td'); //创建第一列id
+            idCell.width = '120px';
+            row.appendChild(idCell); //加入行 ，下面类似
+
+            var idCe = document.createElement('td'); //创建第一列id
+            row.appendChild(idCe); //加入行 ，下面类似
+
+            var nameCell = document.createElement('td');//创建第二列name
+            nameCell.style.padding = "0px 230px 0 0px";
+            nameCell.innerHTML = g;
+            row.appendChild(nameCell);
+
+            //到这里，json中的数据已经添加到表格中，下面为每行末尾添加删除按钮
+            var delCell = document.createElement('td');//创建第四列，操作列
+            delCell.style.padding = "0 100px 0 -90px";
+            row.appendChild(delCell);
+            var btnDel = document.createElement('input'); //创建一个input控件
+            btnDel.style.backgroundColor = "rgba(250,230,230, 0.2)";
+            btnDel.style.color = 'white';
+            btnDel.setAttribute('type', 'button'); //type="button"
+            btnDel.setAttribute('value', '删除');
+            //删除操作
+            btnDel.onclick = function () {
+                if (confirm("确定删除这一行嘛？")) {
+                    //找到按钮所在行的节点，然后删掉这一行
+                    this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+                    //btnDel - td - tr - tbody - 删除(tr)
+                    //刷新网页还原。实际操作中，还要删除数据库中数据，实现真正删除
+                }
+            }
+            delCell.appendChild(btnDel); //把删除按钮加入td，别忘了
+            return row; //返回tr数据
+        }
+
+    </script>
+</body>
+
+</html>

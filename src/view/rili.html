@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>首页展示</title>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <style>
+        body {
+            background-color: #EE6363;
+            margin: 0;
+            padding: 0;
+        }
+
+        .q {
+            height: 60px;
+            color: white;
+            padding-top: 30px;
+            padding-left: 10%;
+            font-family: 微软雅黑;
+            font-size: 50px;
+        }
+
+        .e {
+            padding-left: 10%;
+            color: white;
+        }
+
+        .t {
+            width: 100%;
+            height: 80px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            position: relative;
+            background-color: rgba(255, 251, 240, 0.4);
+        }
+
+        * {
+            padding: 0%;
+            margin: 0%;
+        }
+
+
+        .calendar {
+            width: 100%;
+            height: 600px;
+            background: white;
+        }
+
+        #rili {
+            margin: 45px;
+            width: 85%;
+            height: 450px;
+            background: white;
+            padding: 5% 0 0 0;
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, .1);
+        }
+
+        .title {
+            height: 70px;
+            border-bottom: 1px solid rgba(0, 0, 0, .1);
+            position: relative;
+            text-align: center;
+        }
+
+        #calendar-title {
+            font-size: 25px;
+            text-transform: uppercase;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 14px 0 0 0;
+        }
+
+        #calendar-year {
+            font-size: 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: normal;
+        }
+
+        #pre {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            /*没规定大小时，图片显示 0X0*/
+            width: 60px;
+            height: 70px;
+
+        }
+
+        #next {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 60px;
+            height: 70px;
+        }
+
+        .body-list ul {
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .body-list ul li {
+            list-style: none;
+            /*
+            display:inline-block;
+            width: 13.3%;
+            */
+
+            /*100/7 = 14.28%*/
+            display: block;
+            width: 14.28%;
+            float: left;
+
+            /*规定行高，垂直居中*/
+            height: 36px;
+            line-height: 36px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .green {
+            color: #6ac13c;
+        }
+
+        .lightgrey {
+            /*浅灰色显示过去的日期*/
+            color: #a8a8a8;
+        }
+
+        .darkgrey {
+            /*深灰色显示将来的日期*/
+            color: #565656;
+        }
+
+        /*日期当天用绿色背景绿色文字加以显示*/
+        .greenbox {
+            border: 1px solid #6ac13c;
+            background: #e9f8df;
+        }
+
+        .xzbox {
+            border: 1px solid #6ac13c;
+            background: rgb(255, 251, 240);
+        }
+
+        .mark {
+            border: 1px solid #6ac13c;
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="q" onclick="h()">待办事项清单</div>
+    <br>
+    <p class="e">不积跬步无以至千里</p>
+    <hr style="margin: 0 10% 6% 10%;">
+    <div class="t" id="k">
+        <div style="padding-top:20px;padding-left:40%;color:white;font-size:30px;">
+            日历
+        </div>
+    </div>
+    <div class="calendar">
+        <div id="rili">
+            <div class="title">
+                <h1 class="green" id="calendar-title">Month</h1>
+                <h2 class="green" id="calendar-year">Year</h2>
+                <a href="" id="pre">上个月</a>
+                <a href="" id="next">下个月</a>
+            </div>
+
+            <div class="body">
+                <div class="lightgrey body-list">
+                    <ul>
+                        <li>SUN</li>
+                        <li>MON</li>
+                        <li>TUE</li>
+                        <li>WED</li>
+                        <li>THU</li>
+                        <li>FRI</li>
+                        <li>SAT</li>
+                    </ul>
+
+                </div>
+
+                <div class="darkgrey body-list" id="liu">
+                    <ul id="days">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var month_olypic = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];//闰年每个月份的天数
+        var month_normal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        var month_name = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        //获取以上各个部分的id
+        var holder = document.getElementById("days");
+        var prev = document.getElementById("prev");
+        var next = document.getElementById("next");
+        var ctitle = document.getElementById("calendar-title");
+        var cyear = document.getElementById("calendar-year");
+        //获取当天的年月日
+        var my_date = new Date();
+        var my_year = my_date.getFullYear();//获取年份
+        var my_month = my_date.getMonth(); //获取月份，一月份的下标为0
+        var my_day = my_date.getDate();//获取当前日期
+
+        //根据年月获取当月第一天是周几
+        function dayStart(month, year) {
+            var tmpDate = new Date(year, month, 1);
+            return (tmpDate.getDay());
+        }
+        //根据年份判断某月有多少天(11,2018),表示2018年12月
+        function daysMonth(month, year) {
+            var tmp1 = year % 4;
+            var tmp2 = year % 100;
+            var tmp3 = year % 400;
+
+            if ((tmp1 == 0 && tmp2 != 0) || (tmp3 == 0)) {
+                return (month_olypic[month]);//闰年
+            } else {
+                return (month_normal[month]);//非闰年
+            }
+        }
+
+        //给动态li添加一个ID
+        function add_id() {
+            var liid = document.getElementsByTagName('li');
+            for (i = 0; i < liid.length; i++) {
+                liid[i].id = 'theid' + i;
+            }
+        }
+        window.onload = add_id;
+
+        //取选中li的id
+        $("ul").on("click", "li", function () {
+            var _this = $(this).children();
+
+            //parseInt函数可解析一个字符串，并返回一个整数
+            var ri = parseInt($(this).html());
+            console.log(parseInt($(this).html()));
+
+            //存取选中当前日期时的年份
+            var yea = document.getElementById('calendar-year').innerHTML;
+            var he = JSON.stringify(yea);
+            var bu = JSON.parse(he);
+            console.log(he);
+            window.localStorage.setItem("year", bu);
+            window.localStorage.getItem(bu);
+
+            //存取选中当前日期时的月份
+            var tit = document.getElementById('calendar-title').innerHTML;
+            var ti = JSON.stringify(tit);//转换为字符串
+            var tg = JSON.parse(ti);//转换为数据
+            console.log(ti);
+            window.localStorage.setItem("title", tg);
+            window.localStorage.getItem(tg);
+
+            //存储选中日期的项目名称
+            window.localStorage.setItem("rili", ri);
+            window.localStorage.getItem(ri);
+
+            //把选中的年月日以字符串形式存储在一起
+            var ymr = localStorage.getItem('year') + '-' + localStorage.getItem('title') + '-' + localStorage.getItem('rili');
+            var ym = JSON.stringify(ymr);
+            var ymr1 = JSON.parse(ym);
+            console.log(ymr);
+            window.localStorage.setItem("yemori", ymr1);
+            window.localStorage.getItem(ymr1);
+
+            var re = /^[0-9]+.?[0-9]*$/; //判断字符串是否为数字 //判断正整数 /^[1-9]+[0-9]*]*$/
+            if (!re.test(ri)) {
+                console.log('请选择正确的日期');
+                return false;
+            }
+            else {
+                $("ul li").removeClass("xzbox");//点击第二个li时，第一个li恢复原来的css
+                $(this).addClass("xzbox");//给选中的日期添加一个样式
+
+                //选中的时候弹出一个小窗口创建待办事项
+                if (confirm('是否为当前选中日期创建待办事项？')) {
+                    window.open('http://localhost:63342/untitled/venv/layDate-v5.0.9/%E9%80%89%E6%8B%A9%E6%97%B6%E9%97%B4%E5%BC%B9%E5%87%BA%E5%B0%8F%E7%AA%97%E5%8F%A3.html?_ijt=qe2gutap01ksstt0g3doqp67gs', 'newwindow', 'height=500, width=700, top=30%,left=30%, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no');
+                }
+                else
+                    return false;
+            }
+
+            //判断如果当前日期选中并创建提交了事项后，标记当前的日期
+            var dt = localStorage.getItem('yemori');
+            console.log(dt);
+            if (dt == '')
+                return false;
+            else
+                $(this).addClass("mark");
+        });
+
+        //判断如果当前日期选中并创建提交了事项后再次选中当前日期时打开页面
+
+        //js实现str插入li+class,不要忘了用innerhtml进行插入
+        function refreshDate() {
+            var str = "";
+            //计算当月的天数和每月第一天都是周几，day_month和day_year都从上面获得
+            var totalDay = daysMonth(my_month, my_year);
+            var firstDay = dayStart(my_month, my_year);
+            //添加每个月的空白部分
+            for (var i = 0; i < firstDay; i++) {
+                str += "<li>" + "</li>";
+            }
+
+            //从一号开始添加知道totalDay，并为pre，next和当天添加样式
+            var myclass;
+            for (var i = 1; i <= totalDay; i++) {
+                //三种情况年份小，年分相等月份小，年月相等，天数小
+                //点击pre和next之后，my_month和my_year会发生变化，将其与现在的直接获取的再进行比较
+                //i与my_day进行比较,pre和next变化时，my_day是不变的
+                console.log(my_year + " " + my_month + " " + my_day);
+                console.log(my_date.getFullYear() + " " + my_date.getMonth() + " " + my_date.getDay());
+                if ((my_year < my_date.getFullYear()) || (my_year == my_date.getFullYear() && my_month < my_date.getMonth()) || (my_year == my_date.getFullYear() && my_month == my_date.getMonth() && i < my_day)) {
+                    myclass = " class='lightgrey'";
+                } else if (my_year == my_date.getFullYear() && my_month == my_date.getMonth() && i == my_day) {
+                    myclass = "class = 'green greenbox'";
+                } else {
+                    myclass = "class = 'darkgrey'";
+                }
+                str += "<li " + myclass + ">" + i + "</li>";
+            }
+            holder.innerHTML = str;
+            ctitle.innerHTML = month_name[my_month];
+            cyear.innerHTML = my_year;
+
+        }
+        //调用refreshDate()函数，日历才会出现
+        refreshDate();
+        //实现onclick向前或向后移动
+        pre.onclick = function (e) {
+            e.preventDefault();
+            my_month--;
+            if (my_month < 0) {
+                my_year--;
+                my_month = 11; //即12月份
+            }
+            refreshDate();
+        }
+
+        next.onclick = function (e) {
+            e.preventDefault();
+            my_month++;
+            if (my_month > 11) {
+                my_month = 0;
+                my_year++;
+            }
+            refreshDate();
+        }
+    </script>
+</body>
+
+</html>
